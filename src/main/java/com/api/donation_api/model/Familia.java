@@ -9,25 +9,29 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Entity(name = "pessoas")
-@Table(name = "pessoas")
+@Entity(name = "familia")
+@Table(name = "familia")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pessoa {
+public class Familia {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @OneToOne
     @Column(nullable = false, unique = true)
-    private String nome;
+    private Endereco endereco;
 
-    @Column(unique = true, nullable = false)
-    private String cpf;
+    @OneToOne
+    @Column(nullable = false, unique = true)
+    private Pessoa lider;
 
-    private String telefone;
+    @ManyToMany(mappedBy = "familias")
+    @Column(nullable = false)
+    @JsonIgnore
+    private Set<Pessoa> dependentes;
 
-    @Column(unique = true, nullable = false)
-    private String dataNascimento;
+
 }

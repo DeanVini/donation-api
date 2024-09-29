@@ -49,6 +49,7 @@ public class AutenticacaoService {
     }
 
     public Usuario registrar(NovoUsuarioRequestDTO novoUsuarioRequestDTO) {
+        System.out.println(novoUsuarioRequestDTO);
         Usuario usuario = Usuario
                 .builder()
                 .login(novoUsuarioRequestDTO.getLogin())
