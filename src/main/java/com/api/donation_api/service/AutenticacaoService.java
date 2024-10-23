@@ -48,12 +48,15 @@ public class AutenticacaoService {
         return jwtService.generateToken(usuario);
     }
 
+    //TODO: Validar o CPF
     public Usuario registrar(NovoUsuarioRequestDTO novoUsuarioRequestDTO) {
-        System.out.println(novoUsuarioRequestDTO);
         Usuario usuario = Usuario
                 .builder()
                 .login(novoUsuarioRequestDTO.getLogin())
                 .senha(passwordEncoder.encode(novoUsuarioRequestDTO.getSenha()))
+                .email(novoUsuarioRequestDTO.getEmail())
+                .nome(novoUsuarioRequestDTO.getNome())
+                .cpf(novoUsuarioRequestDTO.getCpf())
                 .build();
 
         return usuarioRepository.save(usuario);
