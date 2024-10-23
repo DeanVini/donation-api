@@ -57,6 +57,7 @@ public class AutenticacaoService {
                 .email(novoUsuarioRequestDTO.getEmail())
                 .nome(novoUsuarioRequestDTO.getNome())
                 .cpf(novoUsuarioRequestDTO.getCpf())
+                .administrador(false)
                 .build();
 
         return usuarioRepository.save(usuario);

@@ -29,26 +29,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
-                .authorizeRequests()
-                .requestMatchers("/login", "/registro")
-//                .anyRequest()
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        // Configuração de CORS
+        http.cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login", "/registro").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(authenticationProvider);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

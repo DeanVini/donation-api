@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.time.LocalDate;
 
 @Entity(name = "pessoas")
 @Table(name = "pessoas")
@@ -20,7 +20,7 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
 
     @Column(unique = true, nullable = false)
@@ -28,6 +28,6 @@ public class Pessoa {
 
     private String telefone;
 
-    @Column(unique = true, nullable = false)
-    private String dataNascimento;
+    @Column(nullable = false)
+    private LocalDate dataNascimento;
 }
