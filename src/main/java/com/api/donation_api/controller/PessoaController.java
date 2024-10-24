@@ -22,7 +22,7 @@ public class PessoaController {
     @PostMapping("/")
     public Pessoa cadastrarPessoa(@RequestBody PessoaDTO pessoaDTO){
         return pessoaService.cadastrarPessoa(pessoaDTO);
-    };
+    }
 
     @GetMapping("/{id}")
     public Optional<Pessoa> getPessoaById(@PathVariable Long id){

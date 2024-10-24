@@ -35,7 +35,7 @@ public class AutenticacaoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public String autenticar(@NotNull AuthRequestDTO authRequestDTO) throws Exception {
+    public String autenticar(@NotNull AuthRequestDTO authRequestDTO) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDTO.getLogin(), authRequestDTO.getSenha())
