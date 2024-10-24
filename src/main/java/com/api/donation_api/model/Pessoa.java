@@ -1,18 +1,13 @@
 package com.api.donation_api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Set;
+import lombok.*;
+import java.util.Date;
 
 @Entity(name = "pessoas")
 @Table(name = "pessoas")
-@Getter
-@Setter
+@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pessoa {
@@ -20,7 +15,7 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
 
     @Column(unique = true, nullable = false)
@@ -28,6 +23,6 @@ public class Pessoa {
 
     private String telefone;
 
-    @Column(unique = true, nullable = false)
-    private String dataNascimento;
+    @Column(nullable = false)
+    private Date dataNascimento;
 }

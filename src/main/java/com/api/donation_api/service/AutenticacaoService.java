@@ -2,8 +2,10 @@ package com.api.donation_api.service;
 
 import com.api.donation_api.dto.AuthRequestDTO;
 import com.api.donation_api.dto.NovoUsuarioRequestDTO;
+import com.api.donation_api.exception.LoginInvalidoException;
 import com.api.donation_api.model.Usuario;
 import com.api.donation_api.repository.UsuarioRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,13 +35,13 @@ public class AutenticacaoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public String autenticar(AuthRequestDTO authRequestDTO) throws Exception {
+    public String autenticar(@NotNull AuthRequestDTO authRequestDTO) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequestDTO.getLogin(), authRequestDTO.getSenha())
             );
         } catch (AuthenticationException e) {
-            throw new Exception("Login ou senha inválidos", e);
+            throw new LoginInvalidoException("Login ou senha inválidos");
         }
 
         final Usuario usuario = (Usuario) userDetailsService
@@ -49,7 +51,7 @@ public class AutenticacaoService {
     }
 
     //TODO: Validar o CPF
-    public Usuario registrar(NovoUsuarioRequestDTO novoUsuarioRequestDTO) {
+    public Usuario registrar(@NotNull NovoUsuarioRequestDTO novoUsuarioRequestDTO) {
         Usuario usuario = Usuario
                 .builder()
                 .login(novoUsuarioRequestDTO.getLogin())
@@ -57,6 +59,7 @@ public class AutenticacaoService {
                 .email(novoUsuarioRequestDTO.getEmail())
                 .nome(novoUsuarioRequestDTO.getNome())
                 .cpf(novoUsuarioRequestDTO.getCpf())
+                .administrador(false)
                 .build();
 
         return usuarioRepository.save(usuario);
