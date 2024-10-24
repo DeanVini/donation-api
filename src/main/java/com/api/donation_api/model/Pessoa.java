@@ -1,18 +1,13 @@
 package com.api.donation_api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDate;
+import lombok.*;
+import java.util.Date;
 
 @Entity(name = "pessoas")
 @Table(name = "pessoas")
-@Getter
-@Setter
+@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pessoa {
@@ -29,5 +24,5 @@ public class Pessoa {
     private String telefone;
 
     @Column(nullable = false)
-    private LocalDate dataNascimento;
+    private Date dataNascimento;
 }
