@@ -1,6 +1,6 @@
 package com.api.donation_api.controller;
 
-import com.api.donation_api.dto.PessoaDTO;
+import com.api.donation_api.dto.NovaPessoaRequestDTO;
 import com.api.donation_api.model.Pessoa;
 import com.api.donation_api.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class PessoaController {
 
 
     @PostMapping("/")
-    public Pessoa cadastrarPessoa(@RequestBody PessoaDTO pessoaDTO){
-        return pessoaService.cadastrarPessoa(pessoaDTO);
+    public Pessoa cadastrarPessoa(@RequestBody NovaPessoaRequestDTO novaPessoaRequestDTO){
+        return pessoaService.cadastrarPessoa(novaPessoaRequestDTO);
     }
 
     @GetMapping("/{id}")

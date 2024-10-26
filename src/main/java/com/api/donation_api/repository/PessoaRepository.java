@@ -12,4 +12,6 @@ public interface PessoaRepository extends JpaSpecificationRepository<Pessoa, Lon
     @Override
     @NotNull
     Optional<Pessoa> findById(@NotNull Long id);
+
+    Boolean existsByCpf(@NotNull String cpf);
 }

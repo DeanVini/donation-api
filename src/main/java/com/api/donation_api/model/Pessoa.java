@@ -2,7 +2,8 @@ package com.api.donation_api.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Entity(name = "pessoas")
 @Table(name = "pessoas")
@@ -24,5 +25,5 @@ public class Pessoa {
     private String telefone;
 
     @Column(nullable = false)
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
 }

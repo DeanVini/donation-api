@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends JpaSpecificationRepository<Usuario, Long> {
     Optional<Usuario> findByLogin(String login);
+    Boolean existsByCpf(String cpf);
+    Boolean existsByEmail(String email);
 }
