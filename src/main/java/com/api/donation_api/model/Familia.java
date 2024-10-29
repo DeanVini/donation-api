@@ -21,14 +21,12 @@ public class Familia {
     private Long id;
 
     @OneToOne
-    @Column(nullable = false, unique = true)
     private Endereco endereco;
 
     @OneToOne
-    @Column(nullable = false, unique = true)
     private Pessoa lider;
 
-    @ManyToMany(mappedBy = "familias")
+    @ManyToMany
     @Column(nullable = false)
     @JsonIgnore
     private Set<Pessoa> dependentes;

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class Usuario implements UserDetails {
     private String senha;
 
     private Boolean administrador= false;
+
+    private ZonedDateTime dataCriacao;
 
 
     @Override
@@ -67,5 +71,10 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        dataCriacao = ZonedDateTime.now();
     }
 }

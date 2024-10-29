@@ -1,7 +1,7 @@
 package com.api.donation_api.config;
 
 import com.api.donation_api.dto.RespostaErro;
-import com.api.donation_api.exception.ResourceNotFoundException;
+import com.api.donation_api.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,6 +93,50 @@ public class GlobalExceptionHandlerConfig {
                         .erro("ERRO_VALIDACAO")
                         .mensagem(mensagemErro)
                         .codigoStatus(HttpStatus.BAD_REQUEST.value())
+                        .build());
+    }
+
+    @ExceptionHandler(LoginInvalidoException.class)
+    public ResponseEntity<RespostaErro> handleAutenticacaoException(LoginInvalidoException exception){
+        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(RespostaErro.builder()
+                        .erro("ERRO_AUTENTICACAO")
+                        .mensagem(mensagemErro)
+                        .codigoStatus(HttpStatus.UNAUTHORIZED.value())
+                        .build());
+    }
+
+    @ExceptionHandler(CpfInvalidoException.class)
+    public ResponseEntity<RespostaErro> handleCpfException(CpfInvalidoException exception){
+        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(RespostaErro.builder()
+                        .erro("CPF_INVALIDO")
+                        .mensagem(mensagemErro)
+                        .codigoStatus(HttpStatus.FORBIDDEN.value())
+                        .build());
+    }
+
+    @ExceptionHandler(CepInvalidoException.class)
+    public ResponseEntity<RespostaErro> handleCepException(CepInvalidoException exception){
+        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(RespostaErro.builder()
+                        .erro("CEP_INVALIDO")
+                        .mensagem(mensagemErro)
+                        .codigoStatus(HttpStatus.FORBIDDEN.value())
+                        .build());
+    }
+
+    @ExceptionHandler(InvalidResourceException.class)
+    public ResponseEntity<RespostaErro> handleCepException(InvalidResourceException exception){
+        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(RespostaErro.builder()
+                        .erro("RECURSO_INVALIDO")
+                        .mensagem(mensagemErro)
+                        .codigoStatus(HttpStatus.FORBIDDEN.value())
                         .build());
     }
 }
