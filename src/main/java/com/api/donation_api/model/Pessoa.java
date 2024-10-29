@@ -26,4 +26,8 @@ public class Pessoa {
 
     @Column(nullable = false)
     private LocalDate dataNascimento;
+
+    @OneToOne
+    @JoinColumn(name = "endereco_id", nullable = false)
+    private Endereco endereco;
 }

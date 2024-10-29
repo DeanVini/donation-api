@@ -24,16 +24,24 @@ public class PessoaService {
         this.validadoresNovaPessoa = validadoresNovaPessoa;
     }
 
-    public Pessoa cadastrarPessoa(@NotNull NovaPessoaRequestDTO novaPessoaRequestDTO){
-        validarNovaPessoa(novaPessoaRequestDTO);
+    public List<Pessoa> getAllPessoas(){
+        return pessoaRepository.findAll();
+    }
 
-        Pessoa pessoa = Pessoa
-                .builder()
-                .nome(novaPessoaRequestDTO.getNome())
-                .cpf(novaPessoaRequestDTO.getCpf())
-                .telefone(novaPessoaRequestDTO.getTelefone())
-                .dataNascimento(novaPessoaRequestDTO.getDataNascimento())
-                .build();
+    public Pessoa cadastrarPessoa(@NotNull NovaPessoaRequestDTO novaPessoaRequest) {
+        validarNovaPessoa(novaPessoaRequest);
+
+        Pessoa.PessoaBuilder pessoaBuilder = Pessoa.builder()
+                .nome(novaPessoaRequest.getNome())
+                .cpf(novaPessoaRequest.getCpf())
+                .telefone(novaPessoaRequest.getTelefone())
+                .dataNascimento(novaPessoaRequest.getDataNascimento());
+
+        if (novaPessoaRequest.getEndereco() != null) {
+            pessoaBuilder.endereco(novaPessoaRequest.getEndereco());
+        }
+
+        Pessoa pessoa = pessoaBuilder.build();
 
         return pessoaRepository.save(pessoa);
     }

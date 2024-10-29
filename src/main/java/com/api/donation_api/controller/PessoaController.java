@@ -6,6 +6,7 @@ import com.api.donation_api.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,6 +19,10 @@ public class PessoaController {
         this.pessoaService = pessoaService;
     }
 
+    @GetMapping("/")
+    public List<Pessoa> getAllPessoas(){
+        return pessoaService.getAllPessoas();
+    }
 
     @PostMapping("/")
     public Pessoa cadastrarPessoa(@RequestBody NovaPessoaRequestDTO novaPessoaRequestDTO){
