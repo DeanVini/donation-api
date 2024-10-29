@@ -2,12 +2,10 @@ package com.api.donation_api.model;
 
 import com.api.donation_api.model.Pessoa;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -15,6 +13,7 @@ import java.util.Set;
 @Table(name = "enderecos")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Endereco {
@@ -25,13 +24,22 @@ public class Endereco {
     @NotNull
     private String logradouro;
 
+    @NotNull
     private String cep;
 
+    @NotNull
     private String bairro;
 
+    @NotNull
     private String municipio;
 
+    @NotNull
     private String estado;
+
+    private  String complemento = "";
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Number numero;
 
     @ManyToMany
     @JsonIgnore
