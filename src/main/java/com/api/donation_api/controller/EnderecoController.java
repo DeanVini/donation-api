@@ -32,11 +32,11 @@ public class EnderecoController {
     public Endereco cadastrarEndereco(@RequestBody NovoEnderecoRequestDTO novoEnderecoRequest) throws ResourceNotFoundException {
         return enderecoService.cadastrarEndereco(novoEnderecoRequest);
     }
-//
-//    @PutMapping("/")
-//    public Endereco atualizarEndereco(){
-//
-//    }
+
+    @PutMapping("/{idEndereco}")
+    public Endereco atualizarEndereco(@PathVariable Long idEndereco, @RequestBody NovoEnderecoRequestDTO novoEnderecoDTO) throws ResourceNotFoundException {
+        return enderecoService.atualizarEndereco(idEndereco, novoEnderecoDTO);
+    }
 
     @GetMapping("/viaCep/{cep}")
     public Endereco getEnderecoViaCep(@PathVariable String cep) throws ResourceNotFoundException {
