@@ -1,8 +1,10 @@
 package com.api.donation_api.service;
 
 import com.api.donation_api.dto.NovoEnderecoRequestDTO;
+import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Endereco;
 import com.api.donation_api.repository.EnderecoRepository;
+import com.api.donation_api.utils.BeanPersonalizadoUtils;
 import com.api.donation_api.validations.NovoEnderecoValidator;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,13 @@ public class EnderecoService {
     }
 //    @TODO: quando tiver a generalização dos builds
 //    public Endereco atualizarEndereco(@NotNull )
+
+    public Endereco atualizarEndereco(Long id, NovoEnderecoRequestDTO enderecoDTO) throws ResourceNotFoundException {
+        Endereco endereco = enderecoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
+        BeanPersonalizadoUtils.copiarPropriedadesNaoNulas(enderecoDTO, endereco);
+        return enderecoRepository.save(endereco);
+    }
 
     public List<Endereco> getEnderecosByCep(String cep){
         return enderecoRepository.findAllByCep(cep);
