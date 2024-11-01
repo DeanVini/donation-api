@@ -2,7 +2,9 @@ package com.api.donation_api.service;
 
 import com.api.donation_api.dto.NovaPessoaRequestDTO;
 import com.api.donation_api.exception.CpfInvalidoException;
+import com.api.donation_api.model.Endereco;
 import com.api.donation_api.model.Pessoa;
+import com.api.donation_api.repository.EnderecoRepository;
 import com.api.donation_api.repository.PessoaRepository;
 import com.api.donation_api.validations.CpfValidator;
 import com.api.donation_api.validations.NovaPessoaValidator;
@@ -16,11 +18,13 @@ import java.util.Optional;
 @Service
 public class PessoaService {
     private final PessoaRepository pessoaRepository;
+    private final EnderecoRepository enderecoRepository;
     private final List<NovaPessoaValidator> validadoresNovaPessoa;
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository, List<NovaPessoaValidator> validadoresNovaPessoa) {
+    public PessoaService(PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository, List<NovaPessoaValidator> validadoresNovaPessoa) {
         this.pessoaRepository = pessoaRepository;
+        this.enderecoRepository = enderecoRepository;
         this.validadoresNovaPessoa = validadoresNovaPessoa;
     }
 
@@ -38,7 +42,8 @@ public class PessoaService {
                 .dataNascimento(novaPessoaRequest.getDataNascimento());
 
         if (novaPessoaRequest.getEndereco() != null) {
-            pessoaBuilder.endereco(novaPessoaRequest.getEndereco());
+            Endereco endereco = enderecoRepository.save(novaPessoaRequest.getEndereco());
+            pessoaBuilder.endereco(endereco);
         }
 
         Pessoa pessoa = pessoaBuilder.build();

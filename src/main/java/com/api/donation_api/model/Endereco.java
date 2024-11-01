@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "enderecos")
@@ -41,10 +42,9 @@ public class Endereco {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Number numero;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinTable(name = "endereco_pessoas", joinColumns = @JoinColumn(name = "endereco_id"), inverseJoinColumns = @JoinColumn(name = "pessoa_id"))
-    private Set<Pessoa> pessoas;
+    private Set<Pessoa> pessoas = new HashSet<>();
 
 
 }
