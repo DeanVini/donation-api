@@ -2,6 +2,7 @@ package com.api.donation_api.service;
 
 import com.api.donation_api.dto.NovaPessoaRequestDTO;
 import com.api.donation_api.exception.CpfInvalidoException;
+import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Endereco;
 import com.api.donation_api.model.Pessoa;
 import com.api.donation_api.repository.EnderecoRepository;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +53,15 @@ public class PessoaService {
         return pessoaRepository.save(pessoa);
     }
 
+    public List<Pessoa> getPessoasByEndereco(Long idEndereco) throws ResourceNotFoundException {
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(idEndereco);
+        if (enderecoOptional.isPresent()){
+            Endereco endereco = enderecoOptional.get();
+            return new ArrayList<>(endereco.getPessoas());
+        }
+
+        throw new ResourceNotFoundException("Endereço não encontrado com o id " + idEndereco);
+    }
 
     public Optional<Pessoa> getPessoaById(Long pessoaId){
         return pessoaRepository.findById(pessoaId);
