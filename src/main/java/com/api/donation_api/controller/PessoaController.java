@@ -43,7 +43,6 @@ public class PessoaController {
     }
 
     @GetMapping("/endereco/{idEndereco}")
-    @JsonView(Views.PessoaResumo.class)
     public ResponseEntity<Object> getPessoasByEndereco(@PathVariable Long idEndereco) throws ResourceNotFoundException {
         List<Pessoa> pessoas = pessoaService.getPessoasByEndereco(idEndereco);
         return ConstrutorResposta.respostaOk(pessoas);

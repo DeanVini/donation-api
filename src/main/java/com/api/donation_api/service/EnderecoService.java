@@ -41,8 +41,6 @@ public class EnderecoService {
                 .build();
         return enderecoRepository.save(endereco);
     }
-//    @TODO: quando tiver a generalização dos builds
-//    public Endereco atualizarEndereco(@NotNull )
 
     public Endereco atualizarEndereco(Long id, NovoEnderecoRequestDTO enderecoDTO) throws ResourceNotFoundException {
         Endereco endereco = enderecoRepository.findById(id)

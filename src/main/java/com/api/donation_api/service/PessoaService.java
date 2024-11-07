@@ -43,10 +43,10 @@ public class PessoaService {
                 .telefone(novaPessoaRequest.getTelefone())
                 .dataNascimento(novaPessoaRequest.getDataNascimento());
 
-        if (novaPessoaRequest.getEndereco() != null) {
-            Endereco endereco = enderecoRepository.save(novaPessoaRequest.getEndereco());
-            pessoaBuilder.endereco(endereco);
-        }
+//        if (novaPessoaRequest.getEndereco() != null) {
+//            Endereco endereco = enderecoRepository.save(novaPessoaRequest.getEndereco());
+//            pessoaBuilder.endereco(endereco);
+//        }
 
         Pessoa pessoa = pessoaBuilder.build();
 

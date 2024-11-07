@@ -1,8 +1,10 @@
 package com.api.donation_api.model;
 
 import com.api.donation_api.model.Pessoa;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -42,9 +44,7 @@ public class Endereco {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Number numero;
 
-    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonBackReference("endereco-pessoas")
+    @OneToMany(mappedBy = "endereco")
     private Set<Pessoa> pessoas = new HashSet<>();
-
-
 }
