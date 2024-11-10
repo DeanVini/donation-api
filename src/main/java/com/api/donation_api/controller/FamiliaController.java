@@ -1,6 +1,8 @@
 package com.api.donation_api.controller;
 
-import com.api.donation_api.dto.NovaFamiliaDTO;
+import com.api.donation_api.dto.FamiliaRequestDTO;
+import com.api.donation_api.dto.PessoaRequestDTO;
+import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Familia;
 import com.api.donation_api.service.FamiliaService;
 import com.api.donation_api.utils.ConstrutorResposta;
@@ -26,15 +28,16 @@ public class FamiliaController {
     }
 
     @GetMapping("/{idFamilia}")
-    public ResponseEntity<Object> getById(@PathVariable Long idFamilia){
-        Optional<Familia> familia = familiaService.getFamiliaById(idFamilia);
+    public ResponseEntity<Object> getById(@PathVariable Long idFamilia) throws ResourceNotFoundException {
+        Familia familia = familiaService.getFamiliaById(idFamilia);
         return ConstrutorResposta.respostaOk(familia);
     }
 
-//    @PostMapping("/")
-//    public ResponseEntity<Object> cadastrarFamilia(NovaFamiliaDTO novaFamiliaDTO){
-//
-//    }
+    @PostMapping("/")
+    public ResponseEntity<Object> cadastrarFamilia(@RequestBody FamiliaRequestDTO novaFamiliaDTO) throws ResourceNotFoundException {
+        Familia familiaCriada = familiaService.cadatrarFamilia(novaFamiliaDTO);
+        return ConstrutorResposta.respostaCreated(familiaCriada);
+    }
 //
 //    @PutMapping("/{idFamilia}")
 //    public ResponseEntity<Object> editarFamilia(Long idFamilia, NovaFamiliaDTO novaFamiliaDTO){
@@ -45,4 +48,10 @@ public class FamiliaController {
 //    public ResponseEntity<Object> deletarFamilia(Long idFamilia){
 //
 //    }
+
+    @PutMapping("/{idFamilia}/pessoas")
+    public ResponseEntity<Object> adicionarPessoasFamilia(@PathVariable Long idFamilia, @RequestBody List<PessoaRequestDTO> pessoaRequestDTOS) throws ResourceNotFoundException {
+        Familia familia = familiaService.adicionarPessoaFamilia(idFamilia, pessoaRequestDTOS);
+        return ConstrutorResposta.respostaOk(familia);
+    }
 }

@@ -1,6 +1,6 @@
 package com.api.donation_api.controller;
 
-import com.api.donation_api.dto.NovoEnderecoRequestDTO;
+import com.api.donation_api.dto.EnderecoRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Endereco;
 import com.api.donation_api.service.CepService;
@@ -32,14 +32,14 @@ public class EnderecoController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Object> cadastrarEndereco(@RequestBody NovoEnderecoRequestDTO novoEnderecoRequest) throws ResourceNotFoundException {
+    public ResponseEntity<Object> cadastrarEndereco(@RequestBody EnderecoRequestDTO novoEnderecoRequest) throws ResourceNotFoundException {
         Endereco enderecoCriado = enderecoService.cadastrarEndereco(novoEnderecoRequest);
         return ConstrutorResposta.respostaCreated(enderecoCriado);
     }
 
     @PutMapping("/{idEndereco}")
-    public ResponseEntity<Object> atualizarEndereco(@PathVariable Long idEndereco, @RequestBody NovoEnderecoRequestDTO novoEnderecoDTO) throws ResourceNotFoundException {
-        Endereco enderecoAtualizado = enderecoService.atualizarEndereco(idEndereco, novoEnderecoDTO);
+    public ResponseEntity<Object> atualizarEndereco(@PathVariable Long idEndereco, @RequestBody EnderecoRequestDTO enderecoDTO) throws ResourceNotFoundException {
+        Endereco enderecoAtualizado = enderecoService.atualizarEndereco(idEndereco, enderecoDTO);
         return ConstrutorResposta.respostaOk(enderecoAtualizado);
     }
 
@@ -50,8 +50,8 @@ public class EnderecoController {
     }
 
     @GetMapping("/{idEndereco}")
-    public ResponseEntity<Object> getEnderecoById(@PathVariable Long idEndereco){
-        Optional<Endereco> endereco = enderecoService.getEnderecoById(idEndereco);
+    public ResponseEntity<Object> getEnderecoById(@PathVariable Long idEndereco) throws ResourceNotFoundException {
+        Endereco endereco = enderecoService.getEnderecoById(idEndereco);
         return ConstrutorResposta.respostaOk(endereco);
     }
 }

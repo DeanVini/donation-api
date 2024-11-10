@@ -42,7 +42,7 @@ public class Endereco {
     private  String complemento = "";
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Number numero;
+    private Integer numero;
 
     @JsonBackReference("endereco-pessoas")
     @OneToMany(mappedBy = "endereco")
