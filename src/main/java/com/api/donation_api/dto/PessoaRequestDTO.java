@@ -1,16 +1,17 @@
 package com.api.donation_api.dto;
 
-import com.api.donation_api.model.Endereco;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Builder
-public class NovaPessoaRequestDTO {
+public class PessoaRequestDTO {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long id;
+
     private String nome;
 
     private String cpf;
@@ -20,5 +21,5 @@ public class NovaPessoaRequestDTO {
     private LocalDate dataNascimento;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Endereco endereco;
+    private EnderecoRequestDTO endereco;
 }

@@ -1,6 +1,6 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.NovoUsuarioRequestDTO;
+import com.api.donation_api.dto.UsuarioRequestDTO;
 import com.api.donation_api.exception.CpfInvalidoException;
 import com.api.donation_api.repository.UsuarioRepository;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +14,8 @@ public class CpfNovoUsuarioValidator implements NovoUsuarioValidator{
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void validar(@NotNull NovoUsuarioRequestDTO novoUsuarioRequestDTO){
-        String cpf = novoUsuarioRequestDTO.getCpf();
+    public void validar(@NotNull UsuarioRequestDTO usuarioRequestDTO){
+        String cpf = usuarioRequestDTO.getCpf();
 
         if (!CpfValidator.isCpfValido(cpf)) {
             throw new CpfInvalidoException("O CPF informado não é válido!");

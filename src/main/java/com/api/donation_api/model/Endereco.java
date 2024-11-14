@@ -1,12 +1,15 @@
 package com.api.donation_api.model;
 
 import com.api.donation_api.model.Pessoa;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "enderecos")
@@ -39,12 +42,9 @@ public class Endereco {
     private  String complemento = "";
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Number numero;
+    private Integer numero;
 
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(name = "endereco_pessoas", joinColumns = @JoinColumn(name = "endereco_id"), inverseJoinColumns = @JoinColumn(name = "pessoa_id"))
-    private Set<Pessoa> pessoas;
-
-
+    @JsonBackReference("endereco-pessoas")
+    @OneToMany(mappedBy = "endereco")
+    private Set<Pessoa> pessoas = new HashSet<>();
 }
