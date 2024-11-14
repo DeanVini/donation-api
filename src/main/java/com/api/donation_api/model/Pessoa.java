@@ -1,6 +1,8 @@
 package com.api.donation_api.model;
 
 import com.api.donation_api.view.Views;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,5 +38,12 @@ public class Pessoa {
     @ManyToOne
     @JoinColumn(name = "endereco_id")
     @JsonView(Views.PessoaCompleta.class)
+    @JsonManagedReference("endereco-pessoas")
     private Endereco endereco;
+
+    @ManyToOne
+    @JoinColumn(name = "familia_id")
+    @JsonView(Views.PessoaCompleta.class)
+    @JsonBackReference
+    private Familia familia;
 }

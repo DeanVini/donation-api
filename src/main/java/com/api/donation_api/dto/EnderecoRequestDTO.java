@@ -6,7 +6,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NovoEnderecoRequestDTO {
+public class EnderecoRequestDTO {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long id;
+
     private String logradouro;
 
     private String cep;
@@ -20,5 +23,5 @@ public class NovoEnderecoRequestDTO {
     private String Complemento;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Number numero;
+    private Integer numero;
 }

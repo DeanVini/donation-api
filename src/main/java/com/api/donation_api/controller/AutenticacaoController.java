@@ -1,7 +1,7 @@
 package com.api.donation_api.controller;
 
 import com.api.donation_api.dto.AuthRequestDTO;
-import com.api.donation_api.dto.NovoUsuarioRequestDTO;
+import com.api.donation_api.dto.UsuarioRequestDTO;
 import com.api.donation_api.model.Usuario;
 import com.api.donation_api.service.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/registro")
-    public Usuario registro(@RequestBody NovoUsuarioRequestDTO novoUsuarioRequestDTO) {
+    public Usuario registro(@RequestBody UsuarioRequestDTO novoUsuarioRequestDTO) {
         return autenticacaoService.registrar(novoUsuarioRequestDTO);
     }
 }
