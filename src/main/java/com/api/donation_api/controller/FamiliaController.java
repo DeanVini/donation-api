@@ -38,16 +38,6 @@ public class FamiliaController {
         Familia familiaCriada = familiaService.cadatrarFamilia(novaFamiliaDTO);
         return ConstrutorResposta.respostaCreated(familiaCriada);
     }
-//
-//    @PutMapping("/{idFamilia}")
-//    public ResponseEntity<Object> editarFamilia(Long idFamilia, NovaFamiliaDTO novaFamiliaDTO){
-//
-//    }
-//
-//    @DeleteMapping("/{idFamilia}")
-//    public ResponseEntity<Object> deletarFamilia(Long idFamilia){
-//
-//    }
 
     @PutMapping("/{idFamilia}/pessoas")
     public ResponseEntity<Object> adicionarPessoasFamilia(@PathVariable Long idFamilia, @RequestBody List<PessoaRequestDTO> pessoaRequestDTOS) throws ResourceNotFoundException {
