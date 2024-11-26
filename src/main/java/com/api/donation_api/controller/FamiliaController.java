@@ -2,6 +2,7 @@ package com.api.donation_api.controller;
 
 import com.api.donation_api.dto.FamiliaRequestDTO;
 import com.api.donation_api.dto.PessoaRequestDTO;
+import com.api.donation_api.dto.ServicoRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Familia;
 import com.api.donation_api.service.FamiliaService;
@@ -42,6 +43,12 @@ public class FamiliaController {
     @PutMapping("/{idFamilia}/pessoas")
     public ResponseEntity<Object> adicionarPessoasFamilia(@PathVariable Long idFamilia, @RequestBody List<PessoaRequestDTO> pessoaRequestDTOS) throws ResourceNotFoundException {
         Familia familia = familiaService.adicionarPessoaFamilia(idFamilia, pessoaRequestDTOS);
+        return ConstrutorResposta.respostaOk(familia);
+    }
+
+    @PutMapping("/{idFamilia}/servicos")
+    public ResponseEntity<Object> adicionarServicoFamilia(@PathVariable Long idFamilia, @RequestBody ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
+        Familia familia = familiaService.vincularServicoFamilia(idFamilia, servicoRequestDTO);
         return ConstrutorResposta.respostaOk(familia);
     }
 }
