@@ -110,7 +110,6 @@ public class PessoaService {
     }
 
     public void validarNovaPessoa(@NotNull PessoaRequestDTO pessoaRequestDTO){
-        System.out.println(validadoresNovaPessoa);
         validadoresNovaPessoa.forEach(validador -> validador.validar(pessoaRequestDTO));
     }
 }

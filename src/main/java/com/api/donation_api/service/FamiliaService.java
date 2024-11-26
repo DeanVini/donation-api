@@ -3,16 +3,17 @@ package com.api.donation_api.service;
 import com.api.donation_api.dto.EnderecoRequestDTO;
 import com.api.donation_api.dto.FamiliaRequestDTO;
 import com.api.donation_api.dto.PessoaRequestDTO;
+import com.api.donation_api.dto.ServicoRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Endereco;
 import com.api.donation_api.model.Familia;
 import com.api.donation_api.model.Pessoa;
+import com.api.donation_api.model.Servico;
 import com.api.donation_api.repository.FamiliaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,11 +22,13 @@ public class FamiliaService {
     private final FamiliaRepository familiaRepository;
     private final EnderecoService enderecoService;
     private final PessoaService pessoaService;
+    private final ServicoService servicoService;
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoService enderecoService, PessoaService pessoaService) {
+    public FamiliaService(FamiliaRepository familiaRepository, EnderecoService enderecoService, PessoaService pessoaService, ServicoService servicoService) {
         this.familiaRepository = familiaRepository;
         this.enderecoService = enderecoService;
         this.pessoaService = pessoaService;
+        this.servicoService = servicoService;
     }
 
     public List<Familia> getAllFamilias(){
@@ -86,6 +89,20 @@ public class FamiliaService {
         }catch (ResourceNotFoundException e) {
             throw new RuntimeException("Erro ao obter ou criar o endereço da família.", e);
         }
+    }
+
+    public Familia vincularServicoFamilia(Long idFamilia, ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
+        Familia familia = getFamiliaById(idFamilia);
+
+        if (servicoRequestDTO.getId() == null){
+            Servico servicoCadastrado = servicoService.cadastarServico(servicoRequestDTO);
+            familia.getServicos().add(servicoCadastrado);
+            return familiaRepository.save(familia);
+        }
+
+        Servico servico = servicoService.getById(servicoRequestDTO.getId());
+        familia.getServicos().add(servico);
+        return familiaRepository.save(familia);
     }
 
     private Pessoa processarLiderFamilia(PessoaRequestDTO liderDto) {

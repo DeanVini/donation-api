@@ -7,8 +7,8 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "familia")
-@Table(name = "familia")
+@Entity(name = "familias")
+@Table(name = "familias")
 @Getter
 @Setter
 @Builder
@@ -31,4 +31,7 @@ public class Familia {
     @OneToMany(mappedBy = "familia")
     @Column(nullable = false)
     private Set<Pessoa> pessoas = new HashSet<>();
+
+    @ManyToMany
+    private Set<Servico> servicos = new HashSet<>();
 }
