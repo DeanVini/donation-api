@@ -32,7 +32,6 @@ public class CepService {
     }
 
     public Endereco mapearEnderecoViaCep(Map<String, Object> enderecoViaCep) throws ResourceNotFoundException {
-        System.out.println(enderecoViaCep);
         if (Objects.equals((String) enderecoViaCep.get("erro"), "true")){
             throw new CepInvalidoException("CEP inválido!");
         }

@@ -1,6 +1,6 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.NovoEnderecoRequestDTO;
+import com.api.donation_api.dto.EnderecoRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Endereco;
 import com.api.donation_api.repository.EnderecoRepository;
@@ -26,7 +26,7 @@ public class EnderecoService {
         return enderecoRepository.findAll();
     }
 
-    public Endereco cadastrarEndereco(@NotNull NovoEnderecoRequestDTO novoEnderecoRequest) {
+    public Endereco cadastrarEndereco(@NotNull EnderecoRequestDTO novoEnderecoRequest) {
         novoEndereco.validar(novoEnderecoRequest);
 
         Endereco endereco = Endereco
@@ -41,10 +41,8 @@ public class EnderecoService {
                 .build();
         return enderecoRepository.save(endereco);
     }
-//    @TODO: quando tiver a generalização dos builds
-//    public Endereco atualizarEndereco(@NotNull )
 
-    public Endereco atualizarEndereco(Long id, NovoEnderecoRequestDTO enderecoDTO) throws ResourceNotFoundException {
+    public Endereco atualizarEndereco(Long id, EnderecoRequestDTO enderecoDTO) throws ResourceNotFoundException {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
         BeanPersonalizadoUtils.copiarPropriedadesNaoNulas(enderecoDTO, endereco);
@@ -55,7 +53,17 @@ public class EnderecoService {
         return enderecoRepository.findAllByCep(cep);
     }
 
-    public Optional<Endereco> getEnderecoById(@NotNull Long idEndereco){
-        return enderecoRepository.findById(idEndereco);
+    public Endereco getEnderecoById(@NotNull Long idEndereco) throws ResourceNotFoundException {
+        Endereco endereco = enderecoRepository.findById(idEndereco)
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+
+        return endereco;
+    }
+
+    public Endereco obterOuCriar(EnderecoRequestDTO enderecoRequestDTO) throws ResourceNotFoundException {
+        if (enderecoRequestDTO.getId() != null){
+            return getEnderecoById(enderecoRequestDTO.getId());
+        }
+        return cadastrarEndereco(enderecoRequestDTO);
     }
 }

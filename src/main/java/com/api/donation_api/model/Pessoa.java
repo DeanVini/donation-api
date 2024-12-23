@@ -1,5 +1,9 @@
 package com.api.donation_api.model;
 
+import com.api.donation_api.view.Views;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,20 +18,32 @@ import java.time.LocalDate;
 public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonView(Views.PessoaResumo.class)
     private Long id;
 
     @Column(nullable = false)
+    @JsonView(Views.PessoaResumo.class)
     private String nome;
 
     @Column(unique = true, nullable = false)
+    @JsonView(Views.PessoaResumo.class)
     private String cpf;
 
     private String telefone;
 
     @Column(nullable = false)
+    @JsonView(Views.PessoaResumo.class)
     private LocalDate dataNascimento;
 
-    @OneToOne
-    @JoinColumn(name = "endereco_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "endereco_id")
+    @JsonView(Views.PessoaCompleta.class)
+    @JsonManagedReference("endereco-pessoas")
     private Endereco endereco;
+
+    @ManyToOne
+    @JoinColumn(name = "familia_id")
+    @JsonView(Views.PessoaCompleta.class)
+    @JsonBackReference
+    private Familia familia;
 }

@@ -1,6 +1,6 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.NovoUsuarioRequestDTO;
+import com.api.donation_api.dto.UsuarioRequestDTO;
 import com.api.donation_api.exception.LoginInvalidoException;
 import com.api.donation_api.repository.UsuarioRepository;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +15,8 @@ public class EmailNovoUsuarioValidator implements NovoUsuarioValidator{
     }
 
     @Override
-    public void validar(@NotNull NovoUsuarioRequestDTO novoUsuarioRequestDTO){
-        if(usuarioRepository.existsByEmail(novoUsuarioRequestDTO.getEmail())){
+    public void validar(@NotNull UsuarioRequestDTO usuarioRequestDTO){
+        if(usuarioRepository.existsByEmail(usuarioRequestDTO.getEmail())){
             throw new LoginInvalidoException("O E-mail informado já foi cadastrado!");
         }
     }
