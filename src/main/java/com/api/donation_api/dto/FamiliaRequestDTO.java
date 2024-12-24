@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class FamiliaRequestDTO {
     private String nome;
-    private EnderecoRequestDTO endereco;
+    private addressRequestDTO address;
     private PessoaRequestDTO lider;
     private List<PessoaRequestDTO> pessoas;
 }

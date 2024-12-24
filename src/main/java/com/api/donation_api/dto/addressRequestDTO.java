@@ -6,22 +6,22 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EnderecoRequestDTO {
+public class addressRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
 
-    private String logradouro;
+    private String street;
 
-    private String cep;
+    private String postalCode;
 
-    private String bairro;
+    private String neighborhood;
 
-    private String municipio;
+    private String city;
 
-    private String estado;
+    private String state;
 
-    private String Complemento;
+    private String additionalInfo;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Integer numero;
+    private Integer number;
 }

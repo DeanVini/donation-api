@@ -21,5 +21,5 @@ public class PessoaRequestDTO {
     private LocalDate dataNascimento;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private EnderecoRequestDTO endereco;
+    private addressRequestDTO address;
 }

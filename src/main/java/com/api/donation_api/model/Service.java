@@ -6,23 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
-@Entity(name = "servicos")
-@Table(name = "servicos")
+@Entity(name = "service")
+@Table(name = "services")
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Servico {
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
-    private String tipo;
+    private String type;
 
-    private String descricao;
+    private String description;
 
-    private Boolean disponivel= true;
+    private Boolean available= true;
 }
