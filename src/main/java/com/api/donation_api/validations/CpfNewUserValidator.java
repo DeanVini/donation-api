@@ -1,28 +1,29 @@
 package com.api.donation_api.validations;
 
 import com.api.donation_api.dto.UsuarioRequestDTO;
-import com.api.donation_api.exception.CpfInvalidoException;
+import com.api.donation_api.exception.InvalidCpfException;
 import com.api.donation_api.repository.UsuarioRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CpfNovoUsuarioValidator implements NovoUsuarioValidator{
+public class CpfNewUserValidator implements NewUserValidator {
     private final UsuarioRepository usuarioRepository;
 
-    public CpfNovoUsuarioValidator(UsuarioRepository usuarioRepository) {
+    public CpfNewUserValidator(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void validar(@NotNull UsuarioRequestDTO usuarioRequestDTO){
+    @Override
+    public void validate(@NotNull UsuarioRequestDTO usuarioRequestDTO){
         String cpf = usuarioRequestDTO.getCpf();
 
         if (!CpfValidator.isCpfValido(cpf)) {
-            throw new CpfInvalidoException("O CPF informado não é válido!");
+            throw new InvalidCpfException("O CPF informado não é válido!");
         }
 
         if (usuarioRepository.existsByCpf(cpf)) {
-            throw new CpfInvalidoException("O CPF informado já foi cadastrado!");
+            throw new InvalidCpfException("O CPF informado já foi cadastrado!");
         }
     }
 }

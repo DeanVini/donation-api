@@ -12,30 +12,30 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "usuarios")
-@Table(name = "usuarios")
+@Entity(name = "user")
+@Table(name = "users")
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String login;
+    private String userName;
 
     private String cpf;
 
-    private String nome;
+    private String name;
 
     private String email;
 
-    private String senha;
+    private String password;
 
-    private Boolean administrador= false;
+    private Boolean admin= false;
 
-    private ZonedDateTime dataCriacao;
+    private ZonedDateTime dateCreated;
 
 
     @Override
@@ -45,12 +45,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return userName;
     }
 
     @Override
@@ -75,6 +75,6 @@ public class Usuario implements UserDetails {
 
     @PrePersist
     protected void onCreate(){
-        dataCriacao = ZonedDateTime.now();
+        dateCreated = ZonedDateTime.now();
     }
 }

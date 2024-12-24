@@ -96,8 +96,8 @@ public class GlobalExceptionHandlerConfig {
                         .build());
     }
 
-    @ExceptionHandler(LoginInvalidoException.class)
-    public ResponseEntity<RespostaErro> handleAutenticacaoException(LoginInvalidoException exception){
+    @ExceptionHandler(InvalidLoginException.class)
+    public ResponseEntity<RespostaErro> handleAutenticacaoException(InvalidLoginException exception){
         String mensagemErro = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(RespostaErro.builder()
@@ -107,8 +107,8 @@ public class GlobalExceptionHandlerConfig {
                         .build());
     }
 
-    @ExceptionHandler(CpfInvalidoException.class)
-    public ResponseEntity<RespostaErro> handleCpfException(CpfInvalidoException exception){
+    @ExceptionHandler(InvalidCpfException.class)
+    public ResponseEntity<RespostaErro> handleCpfException(InvalidCpfException exception){
         String mensagemErro = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(RespostaErro.builder()
@@ -118,8 +118,8 @@ public class GlobalExceptionHandlerConfig {
                         .build());
     }
 
-    @ExceptionHandler(CepInvalidoException.class)
-    public ResponseEntity<RespostaErro> handleCepException(CepInvalidoException exception){
+    @ExceptionHandler(InvalidPostalCodeException.class)
+    public ResponseEntity<RespostaErro> handleCepException(InvalidPostalCodeException exception){
         String mensagemErro = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(RespostaErro.builder()

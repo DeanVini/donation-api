@@ -1,111 +1,110 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.EnderecoRequestDTO;
+import com.api.donation_api.dto.addressRequestDTO;
 import com.api.donation_api.dto.FamiliaRequestDTO;
 import com.api.donation_api.dto.PessoaRequestDTO;
 import com.api.donation_api.dto.ServicoRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
-import com.api.donation_api.model.Endereco;
-import com.api.donation_api.model.Familia;
-import com.api.donation_api.model.Pessoa;
-import com.api.donation_api.model.Servico;
-import com.api.donation_api.repository.FamiliaRepository;
-import org.springframework.stereotype.Service;
+import com.api.donation_api.model.Address;
+import com.api.donation_api.model.Family;
+import com.api.donation_api.model.Person;
+import com.api.donation_api.model.Service;
+import com.api.donation_api.repository.FamilyRepository;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@org.springframework.stereotype.Service
 public class FamiliaService {
-    private final FamiliaRepository familiaRepository;
-    private final EnderecoService enderecoService;
+    private final FamilyRepository familyRepository;
+    private final AddressService addressService;
     private final PessoaService pessoaService;
     private final ServicoService servicoService;
 
-    public FamiliaService(FamiliaRepository familiaRepository, EnderecoService enderecoService, PessoaService pessoaService, ServicoService servicoService) {
-        this.familiaRepository = familiaRepository;
-        this.enderecoService = enderecoService;
+    public FamiliaService(FamilyRepository familyRepository, AddressService addressService, PessoaService pessoaService, ServicoService servicoService) {
+        this.familyRepository = familyRepository;
+        this.addressService = addressService;
         this.pessoaService = pessoaService;
         this.servicoService = servicoService;
     }
 
-    public List<Familia> getAllFamilias(){
-        return familiaRepository.findAll();
+    public List<Family> getAllFamilias(){
+        return familyRepository.findAll();
     }
 
-    public Familia getFamiliaById(Long id) throws ResourceNotFoundException {
-        return familiaRepository.findById(id)
+    public Family getFamiliaById(Long id) throws ResourceNotFoundException {
+        return familyRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Familia não encontrada"));
     }
 
-    public Familia cadatrarFamilia(FamiliaRequestDTO novaFamiliaDTO) throws ResourceNotFoundException {
-        Familia.FamiliaBuilder familiaBuilder = Familia.builder()
-                .nome(novaFamiliaDTO.getNome());
+    public Family cadatrarFamilia(FamiliaRequestDTO novaFamiliaDTO) {
+        Family.FamilyBuilder familyBuilder = Family.builder()
+                .name(novaFamiliaDTO.getNome());
 
-        Endereco enderecoFamilia = null;
-        Pessoa liderFamilia = null;
-        Set<Pessoa> pessoasFamilia = new HashSet<>();
+        Address addressFamilia = null;
+        Person liderFamilia = null;
+        Set<Person> pessoasFamilia = new HashSet<>();
 
-        if (novaFamiliaDTO.getEndereco() != null){
-            enderecoFamilia = processarEnderecoFamilia(novaFamiliaDTO.getEndereco());
-            familiaBuilder.endereco(enderecoFamilia);
+        if (novaFamiliaDTO.getAddress() != null){
+            addressFamilia = processarEnderecoFamilia(novaFamiliaDTO.getAddress());
+            familyBuilder.address(addressFamilia);
         }
 
         if (novaFamiliaDTO.getLider() != null){
             liderFamilia = processarLiderFamilia(novaFamiliaDTO.getLider());
-            familiaBuilder.lider(liderFamilia);
+            familyBuilder.leader(liderFamilia);
         }
 
         if (novaFamiliaDTO.getPessoas() != null){
-            pessoasFamilia = processarPessoasFamilia(novaFamiliaDTO.getPessoas(), liderFamilia, enderecoFamilia);
-            familiaBuilder.pessoas(pessoasFamilia);
+            pessoasFamilia = processarPessoasFamilia(novaFamiliaDTO.getPessoas(), liderFamilia, addressFamilia);
+            familyBuilder.members(pessoasFamilia);
         }
 
-        Familia familia = familiaBuilder.pessoas(pessoasFamilia).build();
-        Familia familiaSalva = familiaRepository.save(familia);
-        pessoaService.atualizarFamiliaPessoas(pessoasFamilia, familiaSalva);
-        return familiaSalva;
+        Family family = familyBuilder.members(pessoasFamilia).build();
+        Family savedFamily = familyRepository.save(family);
+        pessoaService.atualizarFamiliaPessoas(pessoasFamilia, savedFamily);
+        return savedFamily;
     }
 
-    public Familia adicionarPessoaFamilia(Long idFamilia ,List<PessoaRequestDTO> pessoasDto) throws ResourceNotFoundException {
-        Familia familia = getFamiliaById(idFamilia);
-        Set<Pessoa> pessoaParaAtualizar = processarPessoasFamilia(pessoasDto, null, familia.getEndereco());
+    public Family adicionarPessoaFamilia(Long idFamilia , List<PessoaRequestDTO> pessoasDto) throws ResourceNotFoundException {
+        Family familia = getFamiliaById(idFamilia);
+        Set<Person> personParaAtualizar = processarPessoasFamilia(pessoasDto, null, familia.getAddress());
 
-        for (Pessoa pessoa : pessoaParaAtualizar) {
-            pessoa.setFamilia(familia);
+        for (Person person : personParaAtualizar) {
+            person.setFamily(familia);
         }
 
-        pessoaService.atualizarFamiliaPessoas(pessoaParaAtualizar, familia);
+        pessoaService.atualizarFamiliaPessoas(personParaAtualizar, familia);
 
-        return familiaRepository.save(familia);
+        return familyRepository.save(familia);
     }
 
-    private Endereco processarEnderecoFamilia(EnderecoRequestDTO enderecoRequestDTO){
+    private Address processarEnderecoFamilia(addressRequestDTO addressRequestDTO){
         try {
-            return enderecoService.obterOuCriar(enderecoRequestDTO);
+            return addressService.getOrCreateAddress(addressRequestDTO);
 
         }catch (ResourceNotFoundException e) {
             throw new RuntimeException("Erro ao obter ou criar o endereço da família.", e);
         }
     }
 
-    public Familia vincularServicoFamilia(Long idFamilia, ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
-        Familia familia = getFamiliaById(idFamilia);
+    public Family vincularServicoFamilia(Long idFamilia, ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
+        Family familia = getFamiliaById(idFamilia);
 
         if (servicoRequestDTO.getId() == null){
-            Servico servicoCadastrado = servicoService.cadastarServico(servicoRequestDTO);
-            familia.getServicos().add(servicoCadastrado);
-            return familiaRepository.save(familia);
+            Service serviceCadastrado = servicoService.cadastarServico(servicoRequestDTO);
+            familia.getServices().add(serviceCadastrado);
+            return familyRepository.save(familia);
         }
 
-        Servico servico = servicoService.getById(servicoRequestDTO.getId());
-        familia.getServicos().add(servico);
-        return familiaRepository.save(familia);
+        Service service = servicoService.getById(servicoRequestDTO.getId());
+        familia.getServices().add(service);
+        return familyRepository.save(familia);
     }
 
-    private Pessoa processarLiderFamilia(PessoaRequestDTO liderDto) {
+    private Person processarLiderFamilia(PessoaRequestDTO liderDto) {
         try {
             return pessoaService.obterOuCriar(liderDto);
         } catch (ResourceNotFoundException e) {
@@ -113,8 +112,8 @@ public class FamiliaService {
         }
     }
 
-    private Set<Pessoa> processarPessoasFamilia(List<PessoaRequestDTO> dtosPessoas, Pessoa lider, Endereco endereco) {
-        Set<Pessoa> pessoasFamilia = dtosPessoas.stream()
+    private Set<Person> processarPessoasFamilia(List<PessoaRequestDTO> dtosPessoas, Person lider, Address address) {
+        Set<Person> pessoasFamilia = dtosPessoas.stream()
                 .map(pessoaDto -> {
                     try {
                         return pessoaService.obterOuCriar(pessoaDto);
@@ -126,7 +125,7 @@ public class FamiliaService {
         if (lider != null) {
             pessoasFamilia.add(lider);
         }
-        pessoaService.atualizarEnderecoPessoas(pessoasFamilia, endereco);
+        pessoaService.atualizarEnderecoPessoas(pessoasFamilia, address);
         return pessoasFamilia;
     }
 }

@@ -2,8 +2,8 @@ package com.api.donation_api.controller;
 
 import com.api.donation_api.dto.AuthRequestDTO;
 import com.api.donation_api.dto.UsuarioRequestDTO;
-import com.api.donation_api.model.Usuario;
-import com.api.donation_api.service.AutenticacaoService;
+import com.api.donation_api.model.User;
+import com.api.donation_api.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class AutenticacaoController {
-    private final AutenticacaoService autenticacaoService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    private AutenticacaoController(AutenticacaoService autenticacaoService) {
-        this.autenticacaoService = autenticacaoService;
+    private AutenticacaoController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequestDTO authRequestDTO) throws Exception {
-        return autenticacaoService.autenticar(authRequestDTO);
+    public String login(@RequestBody AuthRequestDTO authRequestDTO) {
+        return authenticationService.authenticate(authRequestDTO);
     }
 
     @PostMapping("/registro")
-    public Usuario registro(@RequestBody UsuarioRequestDTO novoUsuarioRequestDTO) {
-        return autenticacaoService.registrar(novoUsuarioRequestDTO);
+    public User registro(@RequestBody UsuarioRequestDTO novoUsuarioRequestDTO) {
+        return authenticationService.register(novoUsuarioRequestDTO);
     }
 }

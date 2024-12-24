@@ -1,37 +1,36 @@
 package com.api.donation_api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "familias")
-@Table(name = "familias")
+@Entity(name = "family")
+@Table(name = "families")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Familia {
+public class Family {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @OneToOne
-    private Endereco endereco;
+    private Address address;
 
     @OneToOne
-    private Pessoa lider;
+    private Person leader;
 
-    @OneToMany(mappedBy = "familia")
+    @OneToMany(mappedBy = "family")
     @Column(nullable = false)
-    private Set<Pessoa> pessoas = new HashSet<>();
+    private Set<Person> members = new HashSet<>();
 
     @ManyToMany
-    private Set<Servico> servicos = new HashSet<>();
+    private Set<Service> services = new HashSet<>();
 }
