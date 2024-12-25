@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: careon
+      POSTGRES_USER: amorecaridade
+      POSTGRES_PASSWORD: homologac@
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: careon
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/careon
+      SPRING_DATASOURCE_USERNAME: amorecaridade
+      SPRING_DATASOURCE_PASSWORD: homologac@
+      JWT_SECRET: ${JWT_SECRET}  
