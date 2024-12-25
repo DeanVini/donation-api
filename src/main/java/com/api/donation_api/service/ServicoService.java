@@ -1,50 +1,49 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.ServicoRequestDTO;
+import com.api.donation_api.dto.ServiceRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
-import com.api.donation_api.model.Servico;
-import com.api.donation_api.repository.ServicoRepository;
-import com.api.donation_api.utils.BeanPersonalizadoUtils;
-import org.springframework.stereotype.Service;
+import com.api.donation_api.model.Service;
+import com.api.donation_api.repository.ServiceRepository;
+import com.api.donation_api.utils.CustomBeanUtils;
 
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 public class ServicoService {
-    private final ServicoRepository servicoRepository;
+    private final ServiceRepository serviceRepository;
 
-    public ServicoService(ServicoRepository servicoRepository) {
-        this.servicoRepository = servicoRepository;
+    public ServicoService(ServiceRepository serviceRepository) {
+        this.serviceRepository = serviceRepository;
     }
 
-    public List<Servico> getAllServicos(){
-        return servicoRepository.findAll();
+    public List<Service> getAllServicos(){
+        return serviceRepository.findAll();
     }
 
-    public List<Servico> getAllServicosAtivos(){
-        return servicoRepository.findAllByDisponivelTrue();
+    public List<Service> getAllServicosAtivos(){
+        return serviceRepository.findAllByAvailableTrue();
     }
 
-    public Servico getById(Long idServico) throws ResourceNotFoundException {
-        return servicoRepository.findById(idServico)
+    public Service getById(Long idServico) throws ResourceNotFoundException {
+        return serviceRepository.findById(idServico)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi possível encontrar o serviço informado."));
     }
 
-    public Servico cadastarServico(ServicoRequestDTO servicoRequestDTO){
-        Servico servico = Servico.builder()
-                .tipo(servicoRequestDTO.getTipo())
-                .descricao(servicoRequestDTO.getDescricao())
+    public Service cadastarServico(ServiceRequestDTO serviceRequestDTO){
+        Service service = Service.builder()
+                .type(serviceRequestDTO.getType())
+                .description(serviceRequestDTO.getDescription())
                 .build();
 
-        return servicoRepository.save(servico);
+        return serviceRepository.save(service);
     }
 
-    public void atualizarServico(Long idServico, ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
-        Servico servico = servicoRepository.findById(idServico)
+    public void atualizarServico(Long idServico, ServiceRequestDTO serviceRequestDTO) throws ResourceNotFoundException {
+        Service service = serviceRepository.findById(idServico)
                 .orElseThrow(()->new ResourceNotFoundException("Não foi possível encontrar o serviço!"));
 
-        BeanPersonalizadoUtils.copiarPropriedadesNaoNulas(servicoRequestDTO, servico);
-        servicoRepository.save(servico);
+        CustomBeanUtils.copyNonNullProperties(serviceRequestDTO, service);
+        serviceRepository.save(service);
     }
 
 }

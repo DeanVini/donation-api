@@ -1,6 +1,6 @@
 package com.api.donation_api.config;
 
-import com.api.donation_api.repository.UsuarioRepository;
+import com.api.donation_api.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,15 +14,15 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ApplicationConfig {
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
-    public ApplicationConfig(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public ApplicationConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> usuarioRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        return username -> userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
     @Bean
