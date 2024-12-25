@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServicoRequestDTO {
+public class ServiceRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
 
-    private String tipo;
+    private String type;
 
-    private String descricao;
+    private String description;
 
-    private Boolean disponivel;
+    private Boolean available;
 
-    public String getDescricao(){
-        return descricao != null ? descricao : "";
+    public String getDescription(){
+        return description != null ? description : "";
     }
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class addressRequestDTO {
+public class AddressRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
 

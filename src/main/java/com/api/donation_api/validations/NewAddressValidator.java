@@ -1,6 +1,6 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.addressRequestDTO;
+import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.repository.AddressRepository;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class NewAddressValidator {
         this.addressRepository = addressRepository;
     }
 
-    public void validate(addressRequestDTO addressRequest){
+    public void validate(AddressRequestDTO addressRequest){
         String postalCode = addressRequest.getPostalCode();
         Number number = addressRequest.getNumber();
         List<Address> addressPostalCode = addressRepository.findAllByPostalCode(postalCode);

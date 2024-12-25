@@ -1,7 +1,7 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.addressRequestDTO;
-import com.api.donation_api.dto.PessoaRequestDTO;
+import com.api.donation_api.dto.AddressRequestDTO;
+import com.api.donation_api.dto.PersonRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.model.Family;
@@ -20,18 +20,18 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class PessoaService {
+public class PersonService {
     private final PersonRepository personRepository;
     private final AddressRepository addressRepository;
-    private final List<NewPersonValidator> validadoresNovaPessoa;
+    private final List<NewPersonValidator> newPersonValidator;
     private final AddressService addressService;
 
 
     @Autowired
-    public PessoaService(PersonRepository personRepository, AddressRepository addressRepository, List<NewPersonValidator> validadoresNovaPessoa, AddressService addressService) {
+    public PersonService(PersonRepository personRepository, AddressRepository addressRepository, List<NewPersonValidator> newPersonValidator, AddressService addressService) {
         this.personRepository = personRepository;
         this.addressRepository = addressRepository;
-        this.validadoresNovaPessoa = validadoresNovaPessoa;
+        this.newPersonValidator = newPersonValidator;
         this.addressService = addressService;
     }
 
@@ -39,17 +39,17 @@ public class PessoaService {
         return personRepository.findAll();
     }
 
-    public Person createPerson(@NotNull PessoaRequestDTO newPersonRequest) throws ResourceNotFoundException {
-        validarNovaPessoa(newPersonRequest);
+    public Person createPerson(@NotNull PersonRequestDTO newPersonRequest) throws ResourceNotFoundException {
+        validateNewPerson(newPersonRequest);
 
         Person.PersonBuilder personBuilder = Person.builder()
-                .name(newPersonRequest.getNome())
+                .name(newPersonRequest.getName())
                 .cpf(newPersonRequest.getCpf())
-                .telephone(newPersonRequest.getTelefone())
-                .dateOfBirth(newPersonRequest.getDataNascimento());
+                .telephone(newPersonRequest.getTelephone())
+                .dateOfBirth(newPersonRequest.getDateOfBirth());
 
         if (newPersonRequest.getAddress() != null) {
-            addressRequestDTO addressRequestDTO = newPersonRequest.getAddress();
+            AddressRequestDTO addressRequestDTO = newPersonRequest.getAddress();
             if (addressRequestDTO.getId() != null){
                 Address address = addressService.getAddressById(addressRequestDTO.getId());
                 personBuilder.address(address);
@@ -65,51 +65,51 @@ public class PessoaService {
         return personRepository.save(person);
     }
 
-    public Person atualizarPessoa(Long id, PessoaRequestDTO pessoaRequestDTO) throws ResourceNotFoundException {
+    public Person updatePerson(Long id, PersonRequestDTO personRequestDTO) throws ResourceNotFoundException {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com o ID: " + id));
 
-        CustomBeanUtils.copyNonNullProperties(pessoaRequestDTO, person);
+        CustomBeanUtils.copyNonNullProperties(personRequestDTO, person);
         return personRepository.save(person);
     }
 
-    public List<Person> getPessoasByEndereco(Long idEndereco) throws ResourceNotFoundException {
-        Optional<Address> enderecoOptional = addressRepository.findById(idEndereco);
+    public List<Person> getPeopleByAddress(Long addressId) throws ResourceNotFoundException {
+        Optional<Address> enderecoOptional = addressRepository.findById(addressId);
         if (enderecoOptional.isPresent()){
             Address address = enderecoOptional.get();
             return new ArrayList<>(address.getPeople());
         }
 
-        throw new ResourceNotFoundException("Endereço não encontrado com o id " + idEndereco);
+        throw new ResourceNotFoundException("Endereço não encontrado com o id " + addressId);
     }
 
-    public Person getPessoaById(Long pessoaId) throws ResourceNotFoundException {
+    public Person getPersonById(Long pessoaId) throws ResourceNotFoundException {
         return personRepository.findById(pessoaId)
                 .orElseThrow(()->new ResourceNotFoundException("Pessoa não encontrada."));
     }
 
-    public Person obterOuCriar(PessoaRequestDTO pessoaRequestDTO) throws ResourceNotFoundException {
-        if (pessoaRequestDTO.getId() != null){
-            return getPessoaById(pessoaRequestDTO.getId());
+    public Person getOrCreate(PersonRequestDTO personRequestDTO) throws ResourceNotFoundException {
+        if (personRequestDTO.getId() != null){
+            return getPersonById(personRequestDTO.getId());
         }
-        return createPerson(pessoaRequestDTO);
+        return createPerson(personRequestDTO);
     }
 
-    public void atualizarEnderecoPessoas(Set<Person> people, Address address){
+    public void updatePeopleAddress(Set<Person> people, Address address){
         for(Person person : people){
             person.setAddress(address);
             personRepository.save(person);
         }
     }
 
-    public void atualizarFamiliaPessoas(Set<Person> people, Family familia){
+    public void updatePeopleFamily(Set<Person> people, Family family){
         for(Person person : people){
-            person.setFamily(familia);
+            person.setFamily(family);
             personRepository.saveAndFlush(person);
         }
     }
 
-    public void validarNovaPessoa(@NotNull PessoaRequestDTO pessoaRequestDTO){
-        validadoresNovaPessoa.forEach(validador -> validador.validate(pessoaRequestDTO));
+    public void validateNewPerson(@NotNull PersonRequestDTO personRequestDTO){
+        newPersonValidator.forEach(validator -> validator.validate(personRequestDTO));
     }
 }

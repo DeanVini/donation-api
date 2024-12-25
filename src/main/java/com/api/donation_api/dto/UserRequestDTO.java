@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UsuarioRequestDTO {
+public class UserRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
-    private String login;
-    private String senha;
+    private String username;
+    private String password;
     private String email;
-    private String nome;
+    private String name;
     private String cpf;
 }

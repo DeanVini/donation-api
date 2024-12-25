@@ -1,6 +1,6 @@
 package com.api.donation_api.utils;
 
-import com.api.donation_api.dto.RespostaMensagemDto;
+import com.api.donation_api.dto.ResponseMessageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,8 +23,8 @@ public class ResponseConstructorUtils {
     }
 
     public static ResponseEntity<Object> successResponse(String mensagem) {
-        RespostaMensagemDto resposta = RespostaMensagemDto.builder()
-                .mensagem(mensagem)
+        ResponseMessageDTO resposta = ResponseMessageDTO.builder()
+                .message(mensagem)
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }

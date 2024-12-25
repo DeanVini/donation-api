@@ -3,36 +3,36 @@ package com.api.donation_api.validations;
 import org.jetbrains.annotations.NotNull;
 
 public class CpfValidator {
-    public static boolean isCpfValido(@NotNull String cpf){
-        String cpfSemFormatacao = cpf.replaceAll("[^0-9]", "");
-        if(cpfSemFormatacao.length() != 11){
-            return false;
+    public static boolean isValidCpf(@NotNull String cpf){
+        String unformattedCpf = cpf.replaceAll("[^0-9]", "");
+        if(unformattedCpf.length() != 11){
+            return true;
         }
-        if (cpfSemFormatacao.chars().distinct().count() ==1){
-            return false;
+        if (unformattedCpf.chars().distinct().count() ==1){
+            return true;
         }
-        return validarDigitosCpf(cpfSemFormatacao);
+        return !validateCpfDigits(unformattedCpf);
     }
 
-    private static boolean validarDigitosCpf(@NotNull String cpf) {
-        int[] pesosPrimeiroDigito = {10, 9, 8, 7, 6, 5, 4, 3, 2};
-        int[] pesosSegundoDigito = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+    private static boolean validateCpfDigits(@NotNull String cpf) {
+        int[] weightsFirstDigit = {10, 9, 8, 7, 6, 5, 4, 3, 2};
+        int[] weightsSecondDigit = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 
-        int somaPrimeiroDigito = 0;
+        int firstDigitSum = 0;
         for (int i = 0; i < 9; i++) {
-            somaPrimeiroDigito += (cpf.charAt(i) - '0') * pesosPrimeiroDigito[i];
+            firstDigitSum += (cpf.charAt(i) - '0') * weightsFirstDigit[i];
         }
-        int primeiroDigito = (somaPrimeiroDigito * 10) % 11;
-        if (primeiroDigito == 10) primeiroDigito = 0;
+        int firstDigit = (firstDigitSum * 10) % 11;
+        if (firstDigit == 10) firstDigit = 0;
 
-        int somaSegundoDigito = 0;
+        int secondDigitSum = 0;
         for (int i = 0; i < 9; i++) {
-            somaSegundoDigito += (cpf.charAt(i) - '0') * pesosSegundoDigito[i];
+            secondDigitSum += (cpf.charAt(i) - '0') * weightsSecondDigit[i];
         }
-        somaSegundoDigito += primeiroDigito * 2;
-        int segundoDigito = (somaSegundoDigito * 10) % 11;
-        if (segundoDigito == 10) segundoDigito = 0;
+        secondDigitSum += firstDigit * 2;
+        int secondDigit = (secondDigitSum * 10) % 11;
+        if (secondDigit == 10) secondDigit = 0;
 
-        return primeiroDigito == (cpf.charAt(9) - '0') && segundoDigito == (cpf.charAt(10) - '0');
+        return firstDigit == (cpf.charAt(9) - '0') && secondDigit == (cpf.charAt(10) - '0');
     }
 }

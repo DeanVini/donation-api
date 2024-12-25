@@ -1,6 +1,6 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.ServicoRequestDTO;
+import com.api.donation_api.dto.ServiceRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Service;
 import com.api.donation_api.repository.ServiceRepository;
@@ -29,20 +29,20 @@ public class ServicoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi possível encontrar o serviço informado."));
     }
 
-    public Service cadastarServico(ServicoRequestDTO servicoRequestDTO){
+    public Service cadastarServico(ServiceRequestDTO serviceRequestDTO){
         Service service = Service.builder()
-                .type(servicoRequestDTO.getTipo())
-                .description(servicoRequestDTO.getDescricao())
+                .type(serviceRequestDTO.getType())
+                .description(serviceRequestDTO.getDescription())
                 .build();
 
         return serviceRepository.save(service);
     }
 
-    public void atualizarServico(Long idServico, ServicoRequestDTO servicoRequestDTO) throws ResourceNotFoundException {
+    public void atualizarServico(Long idServico, ServiceRequestDTO serviceRequestDTO) throws ResourceNotFoundException {
         Service service = serviceRepository.findById(idServico)
                 .orElseThrow(()->new ResourceNotFoundException("Não foi possível encontrar o serviço!"));
 
-        CustomBeanUtils.copyNonNullProperties(servicoRequestDTO, service);
+        CustomBeanUtils.copyNonNullProperties(serviceRequestDTO, service);
         serviceRepository.save(service);
     }
 

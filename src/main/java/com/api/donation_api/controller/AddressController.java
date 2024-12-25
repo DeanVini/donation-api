@@ -1,6 +1,6 @@
 package com.api.donation_api.controller;
 
-import com.api.donation_api.dto.addressRequestDTO;
+import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.service.PostalCodeService;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/endereco")
+@RequestMapping("/address")
 public class AddressController {
     private final AddressService addressService;
     private final PostalCodeService postalCodeService;
@@ -31,13 +31,13 @@ public class AddressController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Object> createAddress(@RequestBody addressRequestDTO newAddressRequest) throws ResourceNotFoundException {
+    public ResponseEntity<Object> createAddress(@RequestBody AddressRequestDTO newAddressRequest) throws ResourceNotFoundException {
         Address addressCriado = addressService.createAddress(newAddressRequest);
         return ResponseConstructorUtils.createdResponse(addressCriado);
     }
 
     @PutMapping("/{addressId}")
-    public ResponseEntity<Object> updateAddress(@PathVariable Long addressId, @RequestBody addressRequestDTO addressDTO) throws ResourceNotFoundException {
+    public ResponseEntity<Object> updateAddress(@PathVariable Long addressId, @RequestBody AddressRequestDTO addressDTO) throws ResourceNotFoundException {
         Address updatedAddress = addressService.updateAddress(addressId, addressDTO);
         return ResponseConstructorUtils.okResponse(updatedAddress);
     }

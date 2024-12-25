@@ -1,6 +1,6 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.PessoaRequestDTO;
+import com.api.donation_api.dto.PersonRequestDTO;
 import com.api.donation_api.exception.InvalidCpfException;
 import com.api.donation_api.repository.PersonRepository;
 import org.jetbrains.annotations.NotNull;
@@ -15,10 +15,10 @@ public class NewPersonCpfValidator implements NewPersonValidator {
     }
 
     @Override
-    public void validate(@NotNull PessoaRequestDTO personRequestDTO){
+    public void validate(@NotNull PersonRequestDTO personRequestDTO){
         String cpf = personRequestDTO.getCpf();
 
-        if(!CpfValidator.isCpfValido(cpf)){
+        if(CpfValidator.isValidCpf(cpf)){
             throw new InvalidCpfException("O CPF informado não é válido!");
         }
 

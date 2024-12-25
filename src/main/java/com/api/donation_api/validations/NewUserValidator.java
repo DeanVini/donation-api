@@ -1,7 +1,7 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.UsuarioRequestDTO;
+import com.api.donation_api.dto.UserRequestDTO;
 
 public interface NewUserValidator {
-    void validate(UsuarioRequestDTO usuarioRequestDTO);
+    void validate(UserRequestDTO userRequestDTO);
 }

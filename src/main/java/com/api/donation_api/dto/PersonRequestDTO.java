@@ -8,18 +8,18 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class PessoaRequestDTO {
+public class PersonRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
 
-    private String nome;
+    private String name;
 
     private String cpf;
 
-    private String telefone;
+    private String telephone;
 
-    private LocalDate dataNascimento;
+    private LocalDate dateOfBirth;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private addressRequestDTO address;
+    private AddressRequestDTO address;
 }

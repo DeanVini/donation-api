@@ -1,22 +1,22 @@
 package com.api.donation_api.validations;
 
-import com.api.donation_api.dto.UsuarioRequestDTO;
+import com.api.donation_api.dto.UserRequestDTO;
 import com.api.donation_api.exception.InvalidLoginException;
-import com.api.donation_api.repository.UsuarioRepository;
+import com.api.donation_api.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmailNewUserValidator implements NewUserValidator {
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
-    public EmailNewUserValidator(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public EmailNewUserValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void validate(@NotNull UsuarioRequestDTO usuarioRequestDTO){
-        if(usuarioRepository.existsByEmail(usuarioRequestDTO.getEmail())){
+    public void validate(@NotNull UserRequestDTO userRequestDTO){
+        if(userRepository.existsByEmail(userRequestDTO.getEmail())){
             throw new InvalidLoginException("O E-mail informado já foi cadastrado!");
         }
     }

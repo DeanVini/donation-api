@@ -5,8 +5,8 @@ import com.api.donation_api.model.User;
 
 import java.util.Optional;
 
-public interface UsuarioRepository extends JpaSpecificationRepository<User, Long> {
-    Optional<User> findByLogin(String login);
+public interface UserRepository extends JpaSpecificationRepository<User, Long> {
+    Optional<User> findByUsername(String username);
     Boolean existsByCpf(String cpf);
     Boolean existsByEmail(String email);
 }

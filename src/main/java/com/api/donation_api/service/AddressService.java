@@ -1,6 +1,6 @@
 package com.api.donation_api.service;
 
-import com.api.donation_api.dto.addressRequestDTO;
+import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.repository.AddressRepository;
@@ -25,7 +25,7 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public Address createAddress(@NotNull addressRequestDTO newAddressRequest) {
+    public Address createAddress(@NotNull AddressRequestDTO newAddressRequest) {
         newAddressValidator.validate(newAddressRequest);
 
         Address address = Address
@@ -41,7 +41,7 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public Address updateAddress(Long id, addressRequestDTO addressDTO) throws ResourceNotFoundException {
+    public Address updateAddress(Long id, AddressRequestDTO addressDTO) throws ResourceNotFoundException {
         Address address = addressRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado com o ID: " + id));
         CustomBeanUtils.copyNonNullProperties(addressDTO, address);
@@ -57,7 +57,7 @@ public class AddressService {
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
-    public Address getOrCreateAddress(addressRequestDTO addressRequestDTO) throws ResourceNotFoundException {
+    public Address getOrCreateAddress(AddressRequestDTO addressRequestDTO) throws ResourceNotFoundException {
         if (addressRequestDTO.getId() != null){
             return getAddressById(addressRequestDTO.getId());
         }
