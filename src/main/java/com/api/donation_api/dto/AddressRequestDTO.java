@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class AddressRequestDTO {
@@ -24,4 +26,7 @@ public class AddressRequestDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer number;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<PersonRequestDTO> people;
 }

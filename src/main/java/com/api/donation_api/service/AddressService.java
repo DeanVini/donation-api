@@ -2,6 +2,7 @@ package com.api.donation_api.service;
 
 import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
+import com.api.donation_api.mapper.AddressMapper;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.repository.AddressRepository;
 import com.api.donation_api.utils.CustomBeanUtils;
@@ -15,10 +16,12 @@ import java.util.List;
 public class AddressService {
     private final AddressRepository addressRepository;
     private final NewAddressValidator newAddressValidator;
+    private final AddressMapper addressMapper;
 
-    public AddressService(AddressRepository addressRepository, NewAddressValidator newAddressValidator) {
+    public AddressService(AddressRepository addressRepository, NewAddressValidator newAddressValidator, AddressMapper addressMapper) {
         this.addressRepository = addressRepository;
         this.newAddressValidator = newAddressValidator;
+        this.addressMapper = addressMapper;
     }
 
     public List<Address> getAllAddresses(){
@@ -52,9 +55,16 @@ public class AddressService {
         return addressRepository.findAllByPostalCode(PostalCode);
     }
 
-    public Address getAddressById(@NotNull Long idEndereco) throws ResourceNotFoundException {
-        return addressRepository.findById(idEndereco)
+    public Address getAddressById(@NotNull Long addressId) throws ResourceNotFoundException {
+        return addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+    }
+
+    public AddressRequestDTO getAddressByIdWithPeople(@NotNull Long addressId) throws ResourceNotFoundException {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+
+        return addressMapper.toAddressDTO(address, true);
     }
 
     public Address getOrCreateAddress(AddressRequestDTO addressRequestDTO) throws ResourceNotFoundException {

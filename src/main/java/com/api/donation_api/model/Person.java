@@ -36,13 +36,13 @@ public class Person {
     private LocalDate dateOfBirth;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id")
+    @JoinColumn(name = "address_id")
     @JsonView(Views.PersonComplete.class)
     @JsonManagedReference("endereco-pessoas")
     private Address address;
 
     @ManyToOne
-    @JoinColumn(name = "familia_id")
+    @JoinColumn(name = "family_id")
     @JsonView(Views.PersonComplete.class)
     @JsonBackReference
     private Family family;
