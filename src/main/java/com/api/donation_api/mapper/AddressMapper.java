@@ -4,26 +4,25 @@ import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.dto.PersonRequestDTO;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.model.Person;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = PersonMapper.class)
-public interface AddressMapper {
-
-    AddressRequestDTO toAddressDTO(Address address, @Context boolean includePeople);
-
-    default List<PersonRequestDTO> mapPeopleIfNeeded(List<Person> people, @Context boolean includePeople) {
-        if (!includePeople) {
-            return Collections.emptyList();
+public abstract class AddressMapper {
+    @BeforeMapping
+    protected AddressRequestDTO addressDTOWithPeople(Address address, Boolean withPeople, @MappingTarget AddressRequestDTO addressRequestDTO) {
+        Set<Person> people = address.getPeople();
+        if(people != null){
+            return addressRequestDTO;
         }
-        return people.stream()
-                .map(this::toPersonDTO)
-                .collect(Collectors.toList());
+        return addressRequestDTO;
     }
 
-    PersonRequestDTO toPersonDTO(Person person);
+    public abstract AddressRequestDTO toAddressDTO(Address address, Boolean withPeople);
+    public abstract AddressRequestDTO toAddressDTO(Address address);
 }
