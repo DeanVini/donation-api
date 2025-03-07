@@ -10,6 +10,6 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
     @Named("mapWithoutAddress")
-    @Mapping(target = "address", ignore = true) // Evita que o mapeamento de Person traga Address
+    @Mapping(target = "address", ignore = true)
     PersonRequestDTO toPersonDTO(Person person);
 }
