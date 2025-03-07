@@ -4,9 +4,12 @@ import com.api.donation_api.dto.PersonRequestDTO;
 import com.api.donation_api.model.Person;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = AddressMapper.class)
+@Mapper(componentModel = "spring")
 public interface PersonMapper {
+    @Named("mapWithoutAddress")
+    @Mapping(target = "address", ignore = true) // Evita que o mapeamento de Person traga Address
     PersonRequestDTO toPersonDTO(Person person);
-
 }

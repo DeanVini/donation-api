@@ -14,15 +14,10 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = PersonMapper.class)
 public abstract class AddressMapper {
-    @BeforeMapping
-    protected AddressRequestDTO addressDTOWithPeople(Address address, Boolean withPeople, @MappingTarget AddressRequestDTO addressRequestDTO) {
-        Set<Person> people = address.getPeople();
-        if(people != null){
-            return addressRequestDTO;
-        }
-        return addressRequestDTO;
-    }
 
-    public abstract AddressRequestDTO toAddressDTO(Address address, Boolean withPeople);
+    @Mapping(target = "people", qualifiedByName = "mapWithoutAddress")
     public abstract AddressRequestDTO toAddressDTO(Address address);
+
+    @Mapping(target = "people", ignore = true)
+    public abstract AddressRequestDTO toAddressDTOWithoutPeople(Address address);
 }
