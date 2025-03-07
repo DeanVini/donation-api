@@ -64,7 +64,7 @@ public class AddressService {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
 
-        return addressMapper.toAddressDTO(address, true);
+        return addressMapper.toAddressDTO(address);
     }
 
     public Address getOrCreateAddress(AddressRequestDTO addressRequestDTO) throws ResourceNotFoundException {
