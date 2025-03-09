@@ -32,8 +32,8 @@ public class AddressController {
 
     @PostMapping("/")
     public ResponseEntity<Object> createAddress(@RequestBody AddressRequestDTO newAddressRequest) throws ResourceNotFoundException {
-        Address addressCriado = addressService.createAddress(newAddressRequest);
-        return ResponseConstructorUtils.createdResponse(addressCriado);
+        Address addressCreated = addressService.createAddress(newAddressRequest);
+        return ResponseConstructorUtils.createdResponse(addressCreated);
     }
 
     @PutMapping("/{addressId}")

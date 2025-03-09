@@ -24,6 +24,10 @@ public class AddressRequestDTO {
 
     private String additionalInfo;
 
+    private double latitude;
+
+    private double longitude;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer number;
 
