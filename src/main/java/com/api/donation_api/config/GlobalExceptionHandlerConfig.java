@@ -21,7 +21,7 @@ public class GlobalExceptionHandlerConfig {
     public ResponseEntity<ErrorResponseDTO> handleException(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponseDTO.builder()
-                        .error("ERRO_DESCONHECIDO")
+                        .error("UNKNOWN_ERROR")
                         .message(exception.getMessage())
                         .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .build()
@@ -32,8 +32,8 @@ public class GlobalExceptionHandlerConfig {
     public ResponseEntity<ErrorResponseDTO> handleException(ExpiredJwtException ignored) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponseDTO.builder()
-                        .error("TOKEN_EXPIRADO")
-                        .message("O token informado expirou")
+                        .error("TOKEN_EXPIRED")
+                        .message("The provided token has expired")
                         .statusCode(HttpStatus.FORBIDDEN.value())
                         .build()
                 );
@@ -43,8 +43,8 @@ public class GlobalExceptionHandlerConfig {
     public ResponseEntity<ErrorResponseDTO> handleException(BadCredentialsException ignored) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponseDTO.builder()
-                        .error("CREDENCIAIS_INVALIDAS")
-                        .message("Credenciais inválidas")
+                        .error("INVALID_CREDENTIALS")
+                        .message("Invalid credentials")
                         .statusCode(HttpStatus.UNAUTHORIZED.value())
                         .build()
                 );
@@ -54,8 +54,8 @@ public class GlobalExceptionHandlerConfig {
     public ResponseEntity<ErrorResponseDTO> handleException(SignatureException ignored) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseDTO.builder()
-                        .error("TOKEN_EXPIRADO")
-                        .message("O token informado é inválido")
+                        .error("INVALID_TOKEN")
+                        .message("The provided token is invalid")
                         .statusCode(HttpStatus.BAD_REQUEST.value())
                         .build()
                 );
@@ -66,8 +66,8 @@ public class GlobalExceptionHandlerConfig {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(
                         ErrorResponseDTO.builder()
-                                .error("RECURSO_NAO_ENCONTRADO")
-                                .message("O recurso não foi encontrado")
+                                .error("RESOURCE_NOT_FOUND")
+                                .message("The resource was not found")
                                 .statusCode(HttpStatus.NOT_FOUND.value())
                                 .build()
                 );
@@ -78,8 +78,8 @@ public class GlobalExceptionHandlerConfig {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(
                         ErrorResponseDTO.builder()
-                                .error("ROTA_NAO_ENCONTRADA")
-                                .message("A rota informada não pôde ser encontrada")
+                                .error("ROUTE_NOT_FOUND")
+                                .message("The requested route could not be found")
                                 .statusCode(HttpStatus.NOT_FOUND.value())
                                 .build()
                 );
@@ -87,55 +87,55 @@ public class GlobalExceptionHandlerConfig {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
-        String mensagemErro = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
+        String errorMessage = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseDTO.builder()
-                        .error("ERRO_VALIDACAO")
-                        .message(mensagemErro)
+                        .error("VALIDATION_ERROR")
+                        .message(errorMessage)
                         .statusCode(HttpStatus.BAD_REQUEST.value())
                         .build());
     }
 
     @ExceptionHandler(InvalidLoginException.class)
-    public ResponseEntity<ErrorResponseDTO> handleAutenticacaoException(InvalidLoginException exception){
-        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(InvalidLoginException exception){
+        String errorMessage = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponseDTO.builder()
-                        .error("ERRO_AUTENTICACAO")
-                        .message(mensagemErro)
+                        .error("AUTHENTICATION_ERROR")
+                        .message(errorMessage)
                         .statusCode(HttpStatus.UNAUTHORIZED.value())
                         .build());
     }
 
     @ExceptionHandler(InvalidCpfException.class)
     public ResponseEntity<ErrorResponseDTO> handleCpfException(InvalidCpfException exception){
-        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+        String errorMessage = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponseDTO.builder()
-                        .error("CPF_INVALIDO")
-                        .message(mensagemErro)
+                        .error("INVALID_CPF")
+                        .message(errorMessage)
                         .statusCode(HttpStatus.FORBIDDEN.value())
                         .build());
     }
 
     @ExceptionHandler(InvalidPostalCodeException.class)
-    public ResponseEntity<ErrorResponseDTO> handleCepException(InvalidPostalCodeException exception){
-        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handlePostalCodeException(InvalidPostalCodeException exception){
+        String errorMessage = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponseDTO.builder()
-                        .error("CEP_INVALIDO")
-                        .message(mensagemErro)
+                        .error("INVALID_POSTAL_CODE")
+                        .message(errorMessage)
                         .statusCode(HttpStatus.FORBIDDEN.value())
                         .build());
     }
 
     @ExceptionHandler(InvalidResourceException.class)
-    public ResponseEntity<ErrorResponseDTO> handleCepException(InvalidResourceException exception){
-        String mensagemErro = Objects.requireNonNull(exception.getMessage());
+    public ResponseEntity<ErrorResponseDTO> handleResourceException(InvalidResourceException exception){
+        String errorMessage = Objects.requireNonNull(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponseDTO.builder()
-                        .error("RECURSO_INVALIDO")
-                        .message(mensagemErro)
+                        .error("INVALID_RESOURCE")
+                        .message(errorMessage)
                         .statusCode(HttpStatus.FORBIDDEN.value())
                         .build());
     }
