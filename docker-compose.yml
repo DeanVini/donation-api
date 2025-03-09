@@ -1,16 +1,23 @@
 version: '3.3'
 
 services:
-  application:
+  donation-api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: careon
+    container_name: donation-api
     ports:
-      - "8090:8090"
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: ${DB_URL}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
       GEOCODE_TOKEN: ${GEOCODE_TOKEN}
+      JWT_SECRET: ${JWT_SECRET}
+      FRONT_END_URL: ${FRONT_END_URL}
+    networks:
+      - donation-net
+
+networks:
+  donation-net:
+    driver: bridge
