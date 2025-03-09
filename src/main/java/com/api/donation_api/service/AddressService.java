@@ -4,43 +4,40 @@ import com.api.donation_api.dto.AddressRequestDTO;
 import com.api.donation_api.dto.GeolocationResponseDTO;
 import com.api.donation_api.exception.ResourceNotFoundException;
 import com.api.donation_api.mapper.AddressMapper;
+import com.api.donation_api.mapper.GeoapifyResponseMapper;
 import com.api.donation_api.model.Address;
 import com.api.donation_api.repository.AddressRepository;
 import com.api.donation_api.utils.CustomBeanUtils;
 import com.api.donation_api.validations.NewAddressValidator;
 import com.google.common.util.concurrent.RateLimiter;
+import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AddressService {
-    @Value("${geolocation.api.url}")
-    private String geolocationApiUrl;
-
-    @Value("${geolocation.api.token}")
-    private String geolocationApiKey;
-
+    private static final Logger logger = LoggerFactory.getLogger(AddressService.class);
+    private final GeoapifyResponseMapper geoapifyResponseMapper;
+    private final OkHttpClient httpClient = new OkHttpClient();
     private final AddressRepository addressRepository;
     private final NewAddressValidator newAddressValidator;
     private final AddressMapper addressMapper;
-    private final RestTemplate restTemplate;
+    private final GeolocationService geolocationService;
     private final RateLimiter rateLimiter = RateLimiter.create(1.0);
 
 
 
-    public AddressService(AddressRepository addressRepository, NewAddressValidator newAddressValidator, AddressMapper addressMapper, RestTemplate restTemplate) {
+    public AddressService(AddressRepository addressRepository, NewAddressValidator newAddressValidator, AddressMapper addressMapper, RestTemplate restTemplate, GeoapifyResponseMapper geoapifyResponseMapper, GeolocationService geolocationService) {
         this.addressRepository = addressRepository;
         this.newAddressValidator = newAddressValidator;
         this.addressMapper = addressMapper;
-        this.restTemplate = restTemplate;
+        this.geolocationService = geolocationService;
+        this.geoapifyResponseMapper = geoapifyResponseMapper;
     }
 
     public List<Address> getAllAddresses(){
@@ -61,7 +58,14 @@ public class AddressService {
                 .number(newAddressRequest.getNumber())
                 .build();
 
-        fetchAndSetGeolocation(address);
+        GeolocationResponseDTO geoResponse = geolocationService.fetchGeolocation(address)
+                .blockOptional()
+                .orElse(null);
+
+        if (geoResponse != null) {
+            address.setLatitude(geoResponse.getLatitude());
+            address.setLongitude(geoResponse.getLongitude());
+        }
 
         return addressRepository.save(address);
     }
@@ -95,39 +99,4 @@ public class AddressService {
         }
         return createAddress(addressRequestDTO);
     }
-
-    public void fetchAndSetGeolocation(Address address){
-        rateLimiter.acquire();
-
-        String searchQuery = String.format("%s+%d+%s+%s+%s",
-                address.getStreet(),
-                address.getNumber() != null ? address.getNumber() : 0,
-                address.getNeighborhood(),
-                address.getCity(),
-                address.getState()
-        );
-
-        String url = UriComponentsBuilder.fromHttpUrl(geolocationApiUrl + "/search")
-                .queryParam("q", searchQuery)
-                .queryParam("api_key", geolocationApiKey)
-                .queryParam("limit", "1")
-                .toUriString();
-
-        System.out.println("URL gerada: " + url);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<GeolocationResponseDTO[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, GeolocationResponseDTO[].class);
-        System.out.println("Status da resposta: " + response.getStatusCode());
-        System.out.println("GET response: " + response.getBody().length);
-
-        if (response.hasBody() && response.getBody().length > 0) {
-            double lat = response.getBody()[0].getLatitude();
-            double lon = response.getBody()[0].getLongitude();
-            address.setLatitude(lat);
-            address.setLongitude(lon);
-        }
-    }
-
 }
