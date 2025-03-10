@@ -1,3 +1,11 @@
+server:
+  port: 8080
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: ${KEY_STORE_ALIAS}
+
 spring:
   application:
     name: donation-api
@@ -30,14 +38,6 @@ resilience4j:
         limitForPeriod: 1
         limitRefreshPeriod: 1s
         timeoutDuration: 500ms
-
-server:
-  port: 8443
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: ${KEY_STORE_PASSWORD}
-    key-store-type: PKCS12
-    key-alias: ${KEY_STORE_ALIAS}
 
 cors:
   allowed-origins: ${FRONT_END_URL}
