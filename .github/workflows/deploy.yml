@@ -24,7 +24,7 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@"$SSH_URL" << 'EOF'
             echo "Connected with server!"
-            ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@$SSH_URL" << 'EOF'
+            ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@"$SSH_URL" << 'EOF'
           cd /opt/projects/donation-api
           docker-compose build --no-cache
           if [ $? -eq 0 ]; then
