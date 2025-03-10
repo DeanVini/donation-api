@@ -24,15 +24,14 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@"$SSH_URL" << 'EOF'
             echo "Connected with server!"
-            ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@"$SSH_URL" << 'EOF'
-          cd /opt/projects/donation-api
-          docker-compose build --no-cache
-          if [ $? -eq 0 ]; then
-            docker stop donation-api || true
-            docker rm donation-api || true
-            docker-compose up -d
-          else
-            echo "Error in the Docker Compose build"
-            exit 1
-          fi
+            cd /opt/projects/donation-api
+            docker-compose build --no-cache
+            if [ $? -eq 0 ]; then
+              docker stop donation-api || true
+              docker rm donation-api || true
+              docker-compose up -d
+            else
+              echo "Error in the Docker Compose build"
+              exit 1
+            fi
           EOF
