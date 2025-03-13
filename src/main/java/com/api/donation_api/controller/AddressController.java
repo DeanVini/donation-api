@@ -51,7 +51,7 @@ public class AddressController {
     @GetMapping("/{addressId}")
     public ResponseEntity<Object> getAddressById(@PathVariable Long addressId, @RequestParam(required = false, defaultValue = "false") boolean includePeople) throws ResourceNotFoundException {
         if (includePeople) {
-            AddressRequestDTO addressDTO = addressService.getAddressByIdWithPeople(addressId);
+            Address addressDTO = addressService.getAddressByIdWithPeople(addressId);
             return ResponseEntity.ok(addressDTO);
         } else {
             Address address = addressService.getAddressById(addressId);
