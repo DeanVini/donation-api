@@ -1,7 +1,6 @@
 package com.api.donation_api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -16,6 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -48,4 +48,7 @@ public class Address {
     @JsonBackReference("address-people")
     @OneToMany(mappedBy = "address")
     private Set<Person> people = new HashSet<>();
+
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    private Set<Family> families = new HashSet<>();
 }

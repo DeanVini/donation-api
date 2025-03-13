@@ -1,5 +1,8 @@
 package com.api.donation_api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +16,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Family {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,7 +25,9 @@ public class Family {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    @JsonBackReference
     private Address address;
 
     @OneToOne

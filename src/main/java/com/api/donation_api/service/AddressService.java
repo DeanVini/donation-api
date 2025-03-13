@@ -86,11 +86,10 @@ public class AddressService {
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
-    public AddressRequestDTO getAddressByIdWithPeople(@NotNull Long addressId) throws ResourceNotFoundException {
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+    public Address getAddressByIdWithPeople(@NotNull Long addressId) throws ResourceNotFoundException {
 
-        return addressMapper.toAddressDTO(address);
+        return addressRepository.findByIdWithFamilies(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
     public Address getOrCreateAddress(AddressRequestDTO addressRequestDTO) throws ResourceNotFoundException {
