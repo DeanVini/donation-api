@@ -3,6 +3,8 @@ package com.api.donation_api.config;
 import com.api.donation_api.dto.ErrorResponseDTO;
 import com.api.donation_api.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,9 +18,11 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandlerConfig {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandlerConfig.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleException(Exception exception) {
+        logger.error(exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponseDTO.builder()
                         .error("UNKNOWN_ERROR")
