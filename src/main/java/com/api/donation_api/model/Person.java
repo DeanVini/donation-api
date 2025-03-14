@@ -22,13 +22,14 @@ public class Person {
     private Long id;
 
     @Column(nullable = false)
-    @JsonView(Views.PersonSummary.class)
+    @JsonView({Views.PersonSummary.class, Views.AddressDetailView.class})
     private String name;
 
     @Column(unique = true, nullable = false)
     @JsonView(Views.PersonSummary.class)
     private String cpf;
 
+    @JsonView(Views.AddressDetailView.class)
     private String telephone;
 
     @Column(nullable = false)

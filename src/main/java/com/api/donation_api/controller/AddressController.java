@@ -6,8 +6,10 @@ import com.api.donation_api.model.Address;
 import com.api.donation_api.service.PostalCodeService;
 import com.api.donation_api.service.AddressService;
 import com.api.donation_api.utils.ResponseConstructorUtils;
+import com.api.donation_api.view.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class AddressController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Object> createAddress(@RequestBody AddressRequestDTO newAddressRequest) throws ResourceNotFoundException {
+    public ResponseEntity<Object> createAddress(@RequestBody AddressRequestDTO newAddressRequest) {
         Address addressCreated = addressService.createAddress(newAddressRequest);
         return ResponseConstructorUtils.createdResponse(addressCreated);
     }
@@ -49,13 +51,23 @@ public class AddressController {
     }
 
     @GetMapping("/{addressId}")
-    public ResponseEntity<Object> getAddressById(@PathVariable Long addressId, @RequestParam(required = false, defaultValue = "false") boolean includePeople) throws ResourceNotFoundException {
+    public ResponseEntity<Object> getAddressById(
+            @PathVariable Long addressId,
+            @RequestParam(required = false, defaultValue = "false") boolean includePeople)
+            throws ResourceNotFoundException {
+        Address address;
+        MappingJacksonValue mapping;
+
         if (includePeople) {
-            Address addressDTO = addressService.getAddressByIdWithPeople(addressId);
-            return ResponseEntity.ok(addressDTO);
+            address = addressService.getAddressByIdWithFamilies(addressId);
+            mapping = new MappingJacksonValue(address);
+            mapping.setSerializationView(Views.AddressDetailView.class);
         } else {
-            Address address = addressService.getAddressById(addressId);
-            return ResponseEntity.ok(address);
+            address = addressService.getAddressById(addressId);
+            mapping = new MappingJacksonValue(address);
+            mapping.setSerializationView(Views.AddressListView.class);
         }
+
+        return ResponseEntity.ok(mapping);
     }
 }
